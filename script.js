@@ -255,9 +255,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isFormValid) {
             // Submit animation sequence
+            contactForm.submit();
             const submitBtn = document.getElementById('submit-btn');
             submitBtn.disabled = true;
             submitBtn.innerHTML = 'Sending... <i class="fa-solid fa-spinner fa-spin"></i>';
+            e.preventDefault();
 
             setTimeout(() => {
                 // Transition out form
