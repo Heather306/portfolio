@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
 
-        const response =     fetch('http://localhost:3000/contact', {
+        const response =     fetch('https://portfolio-backend-g0st.onrender.com'/contact, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
