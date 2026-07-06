@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
     // Handle form submission
-    contactForm.addEventListener('submit', (e) => {
+    contactForm.addEventListener('submit', async (e) => {
         e.preventDefault();
         
         let isFormValid = true;
@@ -254,28 +254,66 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         if (isFormValid) {
-            // Submit animation sequence
-            contactForm.submit();
-            const submitBtn = document.getElementById('submit-btn');
-            submitBtn.disabled = true;
-            submitBtn.innerHTML = 'Sending... <i class="fa-solid fa-spinner fa-spin"></i>';
-            e.preventDefault();
+
+    const submitBtn = document.getElementById('submit-btn');
+
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = 'Sending... <i class="fa-solid fa-spinner fa-spin"></i>';
+
+    const formData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        subject: document.getElementById('subject').value,
+        message: document.getElementById('message').value
+    };
+
+    try {
+
+        const response =     fetch('http://localhost:3000/contact', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(formData)
+        });
+
+        const result = await response.json();
+
+        if (result.success) {
+
+            contactForm.style.opacity = '0';
 
             setTimeout(() => {
-                // Transition out form
-                contactForm.style.opacity = '0';
-                
-                setTimeout(() => {
-                    contactForm.classList.add('hidden');
-                    contactSuccess.classList.remove('hidden');
-                    contactSuccess.style.opacity = '1';
-                    
-                    // Reset button states
-                    submitBtn.disabled = false;
-                    submitBtn.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane"></i>';
-                }, 300);
-            }, 1200); // Simulate network latency
+
+                contactForm.classList.add('hidden');
+                contactSuccess.classList.remove('hidden');
+                contactSuccess.style.opacity = '1';
+
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane"></i>';
+
+            }, 300);
+
+        } else {
+
+            alert("Failed to send message.");
+
+            submitBtn.disabled = false;
+            submitBtn.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane"></i>';
+
         }
+
+    } catch (error) {
+
+        console.error(error);
+
+        alert("Unable to connect to the server.");
+
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = 'Send Message <i class="fa-solid fa-paper-plane"></i>';
+
+    }
+}
     });
 
     // Reset Form button action
