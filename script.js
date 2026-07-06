@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     try {
 
-        const response =     fetch('https://portfolio-backend-g0st.onrender.com'/contact, {
+        const response =     fetch("https://portfolio-backend-g0st.onrender.com'/contact", {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json'
@@ -277,7 +277,11 @@ document.addEventListener('DOMContentLoaded', () => {
             body: JSON.stringify(formData)
         });
 
-        const result = await response.json();
+        if (!response.ok) {
+    throw new Error(`HTTP ${response.status}`);
+}
+
+const result = await response.json();
 
         if (result.success) {
 
